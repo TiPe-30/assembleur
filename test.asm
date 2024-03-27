@@ -9,7 +9,7 @@ _start:
 
     mov rax, chocolat
     add rax, 4
-
+    ; tenter de charger l'adresse mémoire de chocolat dans un registre
     mov rax, [chocolat]
 
     ; Terminer le programme
@@ -19,4 +19,5 @@ _start:
 
 function_retour:
 
-
+    ADD rsp,2
+    
