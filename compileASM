@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ficASM=$1
+ficASMO=${#}
+localDir=$(pwd)
+
+nasm -f elf64 "$localDir"/"$ficASM" -o "$localDir"/
+ld -o executableASM

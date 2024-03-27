@@ -7,12 +7,16 @@ section .text
 
 _start:
 
-    mov rax, 3
+    mov rax, chocolat
     add rax, 4
 
+    mov rax, [chocolat]
 
     ; Terminer le programme
     mov eax, 1
     xor ebx, ebx
     int 0x80
-    ret
+
+function_retour:
+
+
