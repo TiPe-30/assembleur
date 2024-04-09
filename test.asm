@@ -6,19 +6,23 @@ section .bss
 section .text 
     global _start
 _start:
-
-
     ; utiliser la pile pour cela 
     ; RSP est le registre de pile
     lea rdi, [buffer]
-    call plusGrandEntier
+    call initArray
+    ; pas d'argument passé à la pile donc pas de remise en état initial
+    ;sauvegarde de contexte pour parcourir le tableau
+    lea rdi, [buffer]
+    mov cx, 3
+    push cx
+    call paroursArray
+    add rsp,2
     ; Appel système pour quitter avec le code de sortie 0
     mov eax, 60         ; Code pour l'appel système "exit"
     xor edi, edi        ; Code de sortie 0
     syscall             ; Appel système
 
-
-plusGrandEntier:
+initArray:
     add rsp, 2 ; déclare une variable i
     mov word [rsp], 0 ; initialise a 0 cette variable
 
@@ -29,16 +33,13 @@ tq:
     mov ax, word [rsp]
     mov word [rdi], ax
 
-    ; Afficher le saut de ligne
-    mov eax, 4         ; Code pour l'appel système "write"
-    mov ebx, 1         ; Descripteur de fichier (stdout)
-    mov ecx, newline   ; Adresse de la chaîne de caractères contenant le saut de ligne
-    mov edx, 1         ; Longueur de la chaîne (1 octet)
-    int 0x80           ; Appel système
-
     add rdi, 2
     inc word [rsp]
     jmp tq
 fintq:
     sub rsp, 2
     ret
+
+
+paroursArray:
+    

@@ -1,0 +1,53 @@
+-> section data (variable globale initialiésée) : 
+    section .data
+    newline db '1'
+
+-> section .bss (variable globale non initialisée) :
+    section .bss
+    buffer: resb 64 ; reserve array of 64 bytes
+    wordvar: resw 1 ; reserve a word
+
+-> section principale pour le programme (main) :
+    section .text 
+    global _start
+_start:    
+
+-> Appel système pour affichage : 
+    ; Afficher le saut de ligne
+    mov eax, 4         ; Code pour l'appel système "write"
+    mov ebx, 1         ; Descripteur de fichier (stdout)
+    mov ecx, newline   ; Adresse de la chaîne de caractères contenant le saut de ligne
+    mov edx, 1         ; Longueur de la chaîne (1 octet)
+    int 0x80           ; Appel système
+
+-> Appel système pour arrêter le programme:
+    ; Appel système pour quitter avec le code de sortie 0
+    mov eax, 60         ; Code pour l'appel système "exit"
+    xor edi, edi        ; Code de sortie 0
+    syscall             ; Appel système    
+
+Les registres : 
+    -> 64 bits : RAX, RCX, RDX, RBX, RSP, RBP, RSI, RDI, R8-R15
+    -> 32 bits : EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI, R8D-R15D
+    -> 16 bits : AX, CX, DX, BX, SP, BP, SI, DI, R8W-R15W
+    -> 8  bits : AL/AH, CL/CH, DL/DH, BL/BH, SPL, BPL, SIL, DIL, R8B-R15B
+
+
+Les branchements : 
+
+
+
+
+Load l'adresse effective
+    LEA <registre | adresseMEM>, <[adresseMEM | registre]>
+
+
+appel de la pile :
+    call <etiquette_sousprogramme>
+    ret -> fin de la fonction
+
+    registre return -> eax
+    -> @Retour -> 64 bit -> 8octet -> deplacement de 8
+
+
+constantes : 
