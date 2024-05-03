@@ -1,4 +1,4 @@
--> section data (variable globale initialiésée) : 
+-> section .data (variable globale initialiésée) : 
     section .data
     newline db '1'
 
@@ -35,8 +35,18 @@ Les registres :
 
 Les branchements : 
 
-
-
+        Ce saut conditionnel peut ˆetre ”non-sign ´e” :
+    • je : jump if val1 is equal to val2 (|val1| = |val2|)
+    • ja : jump if val1 is above val2 (|val1| > |val2|)
+    • jae : jump if val1 is above or equal to val2 (|val1| >= |val2|)
+    • jb : jump if val1 is below val2 (|val1| < |val2|)
+    • jbe : jump if val1 is below or equal to val2 (|val1| <= |val2|)
+    Ou ”sign ´e”:
+    • jg : jump if val1 is greater than val2 (val1 > val2)
+    • jge : jump if val1 is greater than or equal val2 (val1 >= val2)
+    • jl : jump if val1 is lower than val2 (val1 < val2)
+    • jle : jump if val1 is lower than or equal val2 (val1 <= val2)
+    . jump : saut inconditionnel
 
 Load l'adresse effective
     LEA <registre | adresseMEM>, <[adresseMEM | registre]>
@@ -49,5 +59,15 @@ appel de la pile :
     registre return -> eax
     -> @Retour -> 64 bit -> 8octet -> deplacement de 8
 
+pour les tableaux: 
+    dans la section bss si ils sont non initialisée :
+        - resb  
+        - resw
+        - resq
+        - resy
+        - resz
 
-constantes : 
+
+vers les pages 200 -> résumé des commandes
+liens vers page supplémentaire en francais -> https://www.unilim.fr/pages_perso/tristan.vaccon/cours_nasm.pdf
+                                           -> 

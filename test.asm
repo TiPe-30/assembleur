@@ -1,45 +1,55 @@
 section .data
-    newline db '1'
+    max: dw 1
+    arrayList: dw 1,3,8,20,90,11,23,-1 ; déclare un tableau dans la mémoire
 section .bss
-    buffer: resb 64 ; reserve array of 64 bytes
-    wordvar: resw 1 ; reserve a word
+    buffer: resw 64 ; reserve array of 64 bytes
 section .text 
     global _start
 _start:
-    ; utiliser la pile pour cela 
-    ; RSP est le registre de pile
-    lea rdi, [buffer]
-    call initArray
-    ; pas d'argument passé à la pile donc pas de remise en état initial
-    ;sauvegarde de contexte pour parcourir le tableau
-    lea rdi, [buffer]
-    mov cx, 3
-    push cx
-    call paroursArray
-    add rsp,2
+    
+    lea rdi, arrayList
+    call find_max
+    mov max, cx
+    ;on affiche maintenant le max
+
+    mov eax, 4         ; Code pour l'appel système "write"
+    mov ebx, 1         ; Descripteur de fichier (stdout)
+    mov ecx, max       ; afficher le nombre maximal dans le vecteur
+    mov edx, 1         ; Longueur de la chaîne (1 octet)
+    int 0x80           ; Appel système
+
     ; Appel système pour quitter avec le code de sortie 0
     mov eax, 60         ; Code pour l'appel système "exit"
     xor edi, edi        ; Code de sortie 0
     syscall             ; Appel système
 
-initArray:
-    add rsp, 2 ; déclare une variable i
-    mov word [rsp], 0 ; initialise a 0 cette variable
+find_max:
+    mov [rsp-8], rax ; on sauvegarde le contexte pour al
+    sub rsp, 8 ; on met la pile a jour
+    mov al, 0 ; on initialise alors le registre al
 
-tq:    
-    cmp word [rsp],64
-    jae fintq
-
-    mov ax, word [rsp]
-    mov word [rdi], ax
-
-    add rdi, 2
-    inc word [rsp]
-    jmp tq
-fintq:
+    ; on initialise la variable max qui contiendra la valeur
+    mov [rsp-2], ax
     sub rsp, 2
+    mov ax, 0
+
+while:
+    cmp word [rdi+rax], -1 
+    je finwhile
+
+if:
+    cmp ax, [rdi+rax]
+    jbe finif
+
+    mov ax, [rdi+rax]
+finif:
+
+    inc al
+    jmp while
+finwhile:
+
+    mov rax, qword [rsp]
+    mov cx,ax
+    mov ax, word [rsp+8]
+    add rsp, 10
     ret
-
-
-paroursArray:
-    
