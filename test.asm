@@ -1,5 +1,5 @@
 section .data
-    max: dw 1
+    max: db '2'
     arrayList: dw 1,3,8,20,90,11,23,-1 ; déclare un tableau dans la mémoire
 section .bss
     buffer: resw 64 ; reserve array of 64 bytes
@@ -9,14 +9,6 @@ _start:
     
     lea rdi, arrayList
     call find_max
-    mov max, cx
-    ;on affiche maintenant le max
-
-    mov eax, 4         ; Code pour l'appel système "write"
-    mov ebx, 1         ; Descripteur de fichier (stdout)
-    mov ecx, max       ; afficher le nombre maximal dans le vecteur
-    mov edx, 1         ; Longueur de la chaîne (1 octet)
-    int 0x80           ; Appel système
 
     ; Appel système pour quitter avec le code de sortie 0
     mov eax, 60         ; Code pour l'appel système "exit"
@@ -24,9 +16,9 @@ _start:
     syscall             ; Appel système
 
 find_max:
-    mov [rsp-8], rax ; on sauvegarde le contexte pour al
+    mov [rsp-8], rax ; on sauvegarde le contexte pour rax
     sub rsp, 8 ; on met la pile a jour
-    mov al, 0 ; on initialise alors le registre al
+    mov rax, 0 ; on initialise alors le registre rax
 
     ; on initialise la variable max qui contiendra la valeur
     mov [rsp-2], ax
@@ -35,16 +27,23 @@ find_max:
 
 while:
     cmp word [rdi+rax], -1 
-    je finwhile
+    jle finwhile
+
+    ; Afficher le saut de ligne
+    mov eax, 4         ; Code pour l'appel système "write"
+    mov ebx, 1         ; Descripteur de fichier (stdout)
+    mov ecx, max   ; Adresse de la chaîne de caractères contenant le saut de ligne
+    mov edx, 1         ; Longueur de la chaîne (1 octet)
+    int 0x80           ; Appel système
 
 if:
     cmp ax, [rdi+rax]
     jbe finif
-
+    
     mov ax, [rdi+rax]
 finif:
 
-    inc al
+    inc rax
     jmp while
 finwhile:
 
